@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>CurveX Math</title>
+		<script src="curvex.js"></script>
+		<link rel="stylesheet" type="text/css" href="curvex.css" />
+	</head>
+	<body>
+		Here I will compare the speed and accuracy of expirmental CurveX Math
+		versus normal PI &amp; Trigonometry Math
+<form action="#" method="GET">
+	<input type="button" onclick="main(this.form)" value="Draw and Calculate" />
+	<label>Sides
+		<input name="nSides" type="number" />
+	</label>
+	<label>Width
+		<input name="nWidth" type="number" setp="any" />
+	</label>
+	<label>Height
+		<input name="nHeight" type="number" setp="any" />
+	</label>
+	<label>Horizontal Radius
+		<input name="nhRadius" type="number" step="any" disabled="disabled" />
+	</label>
+	<label>Vertical Radius
+		<input name="nvRadius" type="number" step="any" disabled="disabled" />
+	</label>
+	<fieldset name="cxBox">
+		<legend>CurveX</legend>
+		<label>Perimeter Length
+			<input name="cxBorder" type="number" step="any" disabled="disabled" />
+		</label>
+		<label>Perimeter / Width
+			<input name="cxWidthPI" type="number" step="any" disabled="disabled" />
+		</label>
+		<label>Perimeter / Height
+			<input name="cxHeightPI" type="number" step="any" disabled="disabled" />
+		</label>
+		<label>Perimeter / ((Height / 2) + (Width / 2))
+			<input name="cxPI" type="number" step="any" disabled="disabled" />
+		</label>
+		<div><canvas style="width: 40em; hieght: 40em"></canvas><p></p></div>
+	</fieldset>
+	<fieldset name="piBox">
+		<legend>PI &amp; Trigonometry</legend>
+		<label>Perimeter Length
+			<input name="piBorder" type="number" step="any" disabled="disabled" />
+		</label>
+		<label>Perimeter / Width
+			<input name="piWidthPI" type="number" step="any" disabled="disabled" />
+		</label>
+		<label>Perimeter / Height
+			<input name="piHeightPI" type="number" step="any" disabled="disabled" />
+		</label>
+		<label>Perimeter / ((Height / 2) + (Width / 2))
+			<input name="piPI" type="number" step="any" disabled="disabled" />
+		</label>
+		<div><canvas style="width: 40em; hieght: 40em"></canvas><p></p></div>
+	</fieldset>
+</form>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+label
+{
+	display: block;
+}
+
+fieldset
+{
+	display: inline;
+	display: inline-box;
+	width: 50em;
+	hieght: 50em;
+	overflow: auto
+}
