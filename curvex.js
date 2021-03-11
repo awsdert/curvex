@@ -266,11 +266,11 @@ function main(form)
 	form.cxBorder.value = cxOut.border;
 	form.piBorder.value = piOut.border;
 	form.cxWidthPI.value = cxOut.border / width;
-	form.piWidthPI.value = piOut / width;
+	form.piWidthPI.value = piOut.border / width;
 	form.cxHeightPI.value = cxOut.border / height;
-	form.piHeightPI.value = piOut / height;
+	form.piHeightPI.value = piOut.border / height;
 	form.cxPI.value = cxOut.border / ((height / 2) + (width / 2));
-	form.piPI.value = piOut / ((height / 2) + (width / 2));
+	form.piPI.value = piOut.border / ((height / 2) + (width / 2));
 	form.cxBox.lastElementChild.lastElementChild.innerHTML = cxOut.html;
 	form.piBox.lastElementChild.lastElementChild.innerHTML = piOut.html;
 }
