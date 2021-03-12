@@ -7,7 +7,7 @@ fieldset
 {
 	display: inline;
 	display: inline-box;
-	width: 50em;
-	hieght: 50em;
+	width: 40em;
+	height: 40em;
 	overflow: auto
 }

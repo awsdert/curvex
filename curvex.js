@@ -46,33 +46,35 @@ function buildSolidTriangle( points, a, b, c )
 	return points;
 }
 
-function cxDraw( gl, app, vxaPoints, sides, width, height )
+function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 {
-	var ret = { border: 0, html: "" };
+	var ret = { border: 0, area: 0, html: "" };
 	var points = [];
 	gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
 	gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
 	gl.clear( gl.COLOR_BUFFER_BIT );
 	gl.useProgram( app );
 	gl.enableVertexAttribArray( vxaPoints );
+	var pxWidth = box.clientWidth, pxHeight = box.clientHeight, mine = 0;
 	var radius = width / 2
-		, square = radius * radius
 		, stop = sides / 4
 		, middle = stop / 2
 		, curve = 2
 		, div = 1 / stop
 		, frac = div / stop
+		, square1 = (width < height) ? width * width : height * height
+		, square2 = (width > height) ? width * width : height * height
 		, addmore = 1
 		, border_len = 0
-		, border_add1 = Math.sqrt(square * 2) / 2
-		, border_add2 = Math.sqrt(square * 3);
+		, one = Math.sqrt(square2 * 2)
+		, two = Math.sqrt(square1 + (square2 * 2));
 	
 	stop -= 2;
 	console.log( "stop: " + stop + "; div: " + div + "; frac: " + frac );
 	for ( var i = 0, x = 0, y = width; i < stop; ++i )
 	{
-		var X = (x - 0.25), Xp = (X + div), Xm = (X - div);
-		var Y = (y - 1), Yp = (Y + div), Ym = (Y - div);
+		var X = x - 0.25, Xp = (X + div), Xm = (X - div);
+		var Y = y - 2, Yp = (Y + div), Ym = (Y - div);
 		
 		console.log( "X = " + X + "; Y = " + Y );
 		points = buildSolidTriangle
@@ -106,14 +108,16 @@ function cxDraw( gl, app, vxaPoints, sides, width, height )
 		x += frac + ((frac * curve) * (i == curve));
 		y -= frac + ((frac * (stop - curve)) * (i == curve));
 		curve += 2 * (i == curve);
+		mine += (one * (i != curve)) + (two * (i == curve));
 	}
 	
 	stop += 2;
-	var mine = ((border_add2 / (stop / 2.5)) + 5);
+	//var mine = stop / (((one / (stop / 2.5)) + 5));
 	
-	border_len = stop / mine;
+	border_len = (mine / stop) * 2.6;
 	pi = border_len / 2;
 	
+	ret.area = border_len / 2;
 	ret.border = border_len;
 	
 	const vxPoints = createPositionsBuffer( gl, points );
@@ -143,9 +147,12 @@ function cxDraw( gl, app, vxaPoints, sides, width, height )
 	return ret;
 }
 
-function piDraw( gl, app, vxaPoints, sides, width, height )
+function piDraw( box, gl, app, vxaPoints, sides, width, height )
 {
-	var ret = { border: 0, html: "" };
+	var ret = { border: 0, area: 0, html: "" };
+	var hradius = width / 2, vradius = height / 2;
+	ret.border = (2 * Math.PI) * hradius;
+	ret.area = Math.PI * hradius;
 	return ret;
 }
 
@@ -259,12 +266,20 @@ function main(form)
 	var piGL = openWebGL(piBox, _piGL), piApp = newApp( piGL, _vsCode, _fsCode );
 	const cx_vxaPoints = cxGL.getAttribLocation ( cxApp, 'aPoints' );
 	const pi_vxaPoints = piGL.getAttribLocation ( piApp, 'aPoints' );
-	var cxOut = cxDraw( cxGL, cxApp, cx_vxaPoints, sides, width, height );
-	var piOut = piDraw( piGL, piApp, pi_vxaPoints, sides, width, height );
+	var cxOut = cxDraw( cxBox, cxGL, cxApp, cx_vxaPoints, sides, width, height );
+	var piOut = piDraw( piBox, piGL, piApp, pi_vxaPoints, sides, width, height );
 	_cxGL = cxGL;
 	_piGL = piGL;
+	form.cxWidth.value = cxBox.clientWidth;
+	form.piWidth.value = piBox.clientWidth;
+	form.cxHeight.value = cxBox.clientHeight;
+	form.piHeight.value = piBox.clientHeight;
+	form.cxArea.value = cxOut.area;
+	form.piArea.value = piOut.area;
 	form.cxBorder.value = cxOut.border;
 	form.piBorder.value = piOut.border;
+	form.cxAreaDividedByBorder.value = cxOut.border / cxOut.area;
+	form.piAreaDividedByBorder.value = piOut.border / piOut.area;
 	form.cxWidthPI.value = cxOut.border / width;
 	form.piWidthPI.value = piOut.border / width;
 	form.cxHeightPI.value = cxOut.border / height;
