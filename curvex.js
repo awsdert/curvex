@@ -111,11 +111,9 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 		mine += (one * (i != curve)) + (two * (i == curve));
 	}
 	
-	stop += 2;
-	//var mine = stop / (((one / (stop / 2.5)) + 5));
-	
-	border_len = (mine / stop) * 2.6;
-	pi = border_len / 2;
+	border_len = (mine / 5);
+	console.log( "one = " + one );
+	console.log( "two = " + two );
 	
 	ret.area = border_len / 2;
 	ret.border = border_len;
