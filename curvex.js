@@ -59,6 +59,10 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 	var radius = width / 2
 		, stop = sides / 4
 		, middle = stop / 2
+		, scaleX = 1 / pxWidth
+		, scaleY = 1 / pxHeight
+		, sizeX = 1 / 40
+		, sizeY = 1 / 40
 		, curve = 2
 		, div = 1 / stop
 		, frac = div / stop
@@ -66,15 +70,15 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 		, square2 = (width > height) ? width * width : height * height
 		, addmore = 1
 		, border_len = 0
-		, one = Math.sqrt(square2 * 2)
-		, two = Math.sqrt(square1 + (square2 * 2));
+		, one = (Math.sqrt(square2 * 2)) * frac
+		, two = (Math.sqrt(square1 + (square2 * 2))) * frac;
 	
 	stop -= 2;
 	console.log( "stop: " + stop + "; div: " + div + "; frac: " + frac );
-	for ( var i = 0, x = 0, y = width; i < stop; ++i )
+	for ( var i = 1, x = 0, y = 1; i < stop; ++i )
 	{
-		var X = x - 0.25, Xp = (X + div), Xm = (X - div);
-		var Y = y - 2, Yp = (Y + div), Ym = (Y - div);
+		var X = (0.225 - x) * scaleX * width, Xp = (X + sizeX), Xm = (X - sizeX);
+		var Y = (1 - y) * scaleY * height, Yp = (Y + sizeY), Ym = (Y - sizeY);
 		
 		console.log( "X = " + X + "; Y = " + Y );
 		points = buildSolidTriangle
@@ -111,7 +115,8 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 		mine += (one * (i != curve)) + (two * (i == curve));
 	}
 	
-	border_len = (mine / 5);
+	stop += 2;
+	border_len = ((mine * width) + (mine * height)) / (stop * (1+((1/3.75))));
 	console.log( "one = " + one );
 	console.log( "two = " + two );
 	
@@ -241,9 +246,9 @@ const _fsCode = `
 function main(form)
 {
 	var nSides = form.nSides, nWidth = form.nWidth, nHeight = form.nHeight;
-	var sides = isInt( nSides.value, 64 );
-	var width = isFlt( nWidth.value, 2 );
-	var height = isFlt( nHeight.value, 2 );
+	var sides = isInt( nSides.value, 100 );
+	var width = isFlt( nWidth.value, 1000 );
+	var height = isFlt( nHeight.value, 1000 );
 	
 	for ( i = sides / 4; Math.floor(i) < i; ++sides, i = sides / 4 );
 	width += (width <= 0);
