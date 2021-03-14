@@ -14,19 +14,23 @@
 	<label>Sides
 		<input name="nSides" type="number" />
 	</label>
-	<label>Width
-		<input name="nWidth" type="number" setp="any" />
-	</label>
-	<label>Height
-		<input name="nHeight" type="number" setp="any" />
-	</label>
+	<fieldset>
+		<legend>Size</legend>
+		<label><input type="checkbox" onclick="both_sizes(this)" />Change Together</label>
+		<label>Width
+			<input name="nWidth" type="number" onkeyup="link_sizes(this)" setp="any" />
+		</label>
+		<label>Height
+			<input name="nHeight" type="number" setp="any" />
+		</label>
+	</fieldset>
 	<label>Horizontal Radius
 		<input name="nhRadius" type="number" step="any" disabled="disabled" />
 	</label>
 	<label>Vertical Radius
 		<input name="nvRadius" type="number" step="any" disabled="disabled" />
 	</label>
-	<fieldset name="cxBox">
+	<fieldset name="cxBox" class="method">
 		<legend>CurveX</legend>
 		<label>Available Width
 			<input name="cxWidth" type="number" disabled="disabled" />
@@ -54,7 +58,7 @@
 		</label>
 		<div><canvas style="width: 20em; height: 20em"></canvas><p></p></div>
 	</fieldset>
-	<fieldset name="piBox">
+	<fieldset name="piBox" class="method">
 		<legend>PI &amp; Trigonometry</legend>
 		<label>Available Width
 			<input name="piWidth" type="number" disabled="disabled" />

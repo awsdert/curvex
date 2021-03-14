@@ -14,6 +14,19 @@ function isInt( val, def )
 	return val;
 }
 
+function both_sizes(cbox)
+{
+	var form = cbox.form;
+	form.nHeight.disabled = cbox.checked;
+}
+
+function link_sizes(nWidth)
+{
+	var form = nWidth.form, nHeight = form.nHeight;
+	if ( nHeight.disabled )
+		nHeight.value = nWidth.value;
+}
+
 function createPositionsBuffer( gl, positions ) {
 
 	// Create a buffer for the square's positions.
@@ -57,6 +70,7 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 	gl.enableVertexAttribArray( vxaPoints );
 	var pxWidth = box.clientWidth, pxHeight = box.clientHeight, mine = 0;
 	var radius = width / 2
+		, half = sides / 2
 		, stop = sides / 4
 		, middle = stop / 2
 		, scaleX = 1 / pxWidth
@@ -116,7 +130,8 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 	}
 	
 	stop += 2;
-	border_len = ((mine * width) + (mine * height)) / (stop * (1+((1/3.75))));
+	//border_len = ((mine * width) + (mine * height)) / (stop * (1+((1/3.75))));
+	border_len = ((sides * one) + (sides * two)) * 6.24;
 	console.log( "one = " + one );
 	console.log( "two = " + two );
 	
