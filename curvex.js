@@ -168,9 +168,94 @@ function cxDraw( box, gl, app, vxaPoints, sides, width, height )
 function piDraw( box, gl, app, vxaPoints, sides, width, height )
 {
 	var ret = { border: 0, area: 0, html: "" };
-	var hradius = width / 2, vradius = height / 2;
-	ret.border = (2 * Math.PI) * hradius;
-	ret.area = Math.PI * hradius;
+	var points = [];
+	gl.viewport( 0, 0, gl.canvas.width, gl.canvas.height );
+	gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+	gl.clear( gl.COLOR_BUFFER_BIT );
+	gl.useProgram( app );
+	gl.enableVertexAttribArray( vxaPoints );
+	var pxWidth = box.clientWidth, pxHeight = box.clientHeight, mine = 0;
+	var radius = (width / 4) + (height / 4)
+		, half = sides / 2
+		, stop = sides / 4
+		, middle = stop / 2
+		, scaleX = 1 / pxWidth
+		, scaleY = 1 / pxHeight
+		, sizeX = 1 / 40
+		, sizeY = 1 / 40
+		, div = 1 / stop
+		, frac = div / stop;
+	
+	stop -= 2;
+	console.log( "stop: " + stop + "; div: " + div + "; frac: " + frac );
+	for ( var i = 1, x = 0, y = 1; i < stop; ++i )
+	{
+		var xy = x + y;
+		var X = xy * scaleX * width, Xp = (X + sizeX), Xm = (X - sizeX);
+		var Y = xy * scaleY * height, Yp = (Y + sizeY), Ym = (Y - sizeY);
+		
+		console.log( "X = " + X + "; Y = " + Y );
+		points = buildSolidTriangle
+		(
+			points
+			, newPointXY( Xm, Ym )
+			, newPointXY( X, Y )
+			, newPointXY( Xp, Ym )
+		);
+		points = buildSolidTriangle
+		(
+			points
+			, newPointXY( -Xm, Ym )
+			, newPointXY( -X, Y )
+			, newPointXY( -Xp, Ym )
+		);
+		points = buildSolidTriangle
+		(
+			points
+			, newPointXY( Xm, -Ym )
+			, newPointXY( X, -Y )
+			, newPointXY( Xp, -Ym )
+		);
+		points = buildSolidTriangle
+		(
+			points
+			, newPointXY( -Xm, -Ym )
+			, newPointXY( -X, -Y )
+			, newPointXY( -Xp, -Ym )
+		);
+		x += frac;
+		y -= frac;
+	}
+	
+	stop += 2;
+	
+	ret.area = Math.PI * radius;
+	ret.border = Math.PI * 2 * radius;
+	
+	const vxPoints = createPositionsBuffer( gl, points );
+	
+	gl.bindBuffer( gl.ARRAY_BUFFER, vxPoints );
+	
+	// Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+	var size = 2;          // 2 components per iteration
+	var type = gl.FLOAT;   // the data is 32bit floats
+	var normalize = false; // don't normalize the data
+	var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+	var offset = 0;        // start at the beginning of the buffer
+	gl.vertexAttribPointer
+	(
+		vxaPoints
+		, size
+		, type
+		, normalize
+		, stride
+		, offset
+	);
+	
+	var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = points.length / 2;
+    gl.drawArrays( primitiveType, offset, count );
 	return ret;
 }
 
